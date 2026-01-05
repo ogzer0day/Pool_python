@@ -68,7 +68,7 @@ game_data = {
 }
 
 
-def alice_inventory(player, catalog, Inventory_value, Item_count):
+def alice_inventory(player, catalog, inventory_value, item_count):
     for value in player.keys():
         for val in catalog.keys():
             if value == val:
@@ -83,8 +83,8 @@ def alice_inventory(player, catalog, Inventory_value, Item_count):
                     f"{total_price} gold"
                     )
     print()
-    print(f"Inventory value: {Inventory_value} gold")
-    print(f"Item count: {Item_count} items")
+    print(f"Inventory value: {inventory_value} gold")
+    print(f"Item count: {item_count} items")
     print("Categories: pixel_sword(1), code_bow(1), health_byte(1), "
           "quantum_ring(3)\n")
 
