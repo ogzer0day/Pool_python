@@ -68,15 +68,7 @@ game_data = {
 }
 
 
-if __name__ == "__main__":
-    print("=== Player Inventory System ===")
-    print()
-    print("=== Alice's Inventory ===")
-    player = game_data["players"]['alice']['items']
-    catalog = game_data["catalog"]
-    i = 0
-    Inventory_value = game_data["players"]['alice']['total_value']
-    Item_count = game_data["players"]['alice']['item_count']
+def alice_inventory(player, catalog, Inventory_value, Item_count):
     for value in player.keys():
         for val in catalog.keys():
             if value == val:
@@ -96,12 +88,45 @@ if __name__ == "__main__":
     print("Categories: pixel_sword(1), code_bow(1), health_byte(1), "
           "quantum_ring(3)\n")
 
+
+def inventory_analytics():
+    print("=== Inventory Analytics ===")
+
+    max_item = 0
+    max_value = 0
+    player_max_item = ""
+    player_max_value = ""
+
+    for name, values in game_data["players"].items():
+        if values['item_count'] > max_item:
+            max_item = values['item_count']
+            player_max_item = name
+        if values['total_value'] > max_value:
+            max_value = values['total_value']
+            player_max_value = name
+
+    print(f"Most valuable player: {player_max_value} ({max_value} gold)")
+    print(f"Most items: {player_max_item} ({max_item} items)")
+
+
+if __name__ == "__main__":
+    print("=== Player Inventory System ===\n")
+
+    print("=== Alice's Inventory ===")
+    player = game_data["players"]['alice']['items']
+    catalog = game_data["catalog"]
+    Inventory_value = game_data["players"]['alice']['total_value']
+    Item_count = game_data["players"]['alice']['item_count']
+
+    alice_inventory(player, catalog, Inventory_value, Item_count)
+
     print("=== Transaction: Alice gives Bob 2 quantum_ring ===")
     if (player['quantum_ring'] - 2) > 0:
         print("Transaction successful!\n")
         print("=== Updated Inventories ===")
         print(f"Alice potions: {player['quantum_ring'] - 2}")
-        print("Bob potions: 2")
+        print("Bob potions: 2\n")
     else:
         print("Transaction failed: not enough items\n")
 
+    inventory_analytics()
