@@ -115,10 +115,10 @@ if __name__ == "__main__":
     print("=== Alice's Inventory ===")
     player = game_data["players"]['alice']['items']
     catalog = game_data["catalog"]
-    Inventory_value = game_data["players"]['alice']['total_value']
-    Item_count = game_data["players"]['alice']['item_count']
+    inventory_value = game_data["players"]['alice']['total_value']
+    item_count = game_data["players"]['alice']['item_count']
 
-    alice_inventory(player, catalog, Inventory_value, Item_count)
+    alice_inventory(player, catalog, inventory_value, item_count)
 
     print("=== Transaction: Alice gives Bob 2 quantum_ring ===")
     if (player['quantum_ring'] - 2) > 0:
