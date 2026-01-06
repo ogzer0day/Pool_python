@@ -130,3 +130,9 @@ if __name__ == "__main__":
         print("Transaction failed: not enough items\n")
 
     inventory_analytics()
+    rerest = ()
+    for key, val in game_data["players"].items():
+        for x in val['items']:
+            rerest = x
+
+    print(f"Rarest items: {rerest}")
