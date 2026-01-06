@@ -1,3 +1,33 @@
+"""
+Player Inventory System
+
+This script manages and analyzes the inventory of players in a game.
+
+Data Structure:
+- game_data:
+    - players: dictionary of players with their items, total value, and item count
+    - catalog: dictionary of item definitions with type, value, and rarity
+
+Functions:
+1. alice_inventory(player, catalog, inventory_value, item_count)
+    - Prints a detailed inventory summary for Alice.
+    - Shows each item with type, rarity, quantity, value per unit, and total value.
+    - Prints total inventory value and item count.
+    - Prints a static example of categories (hardcoded for Alice).
+
+2. inventory_analytics()
+    - Finds and prints:
+        * Most valuable player based on total inventory value
+        * Player with the most items in their inventory
+
+Main Execution:
+- Prints Alice's inventory
+- Demonstrates a transaction: Alice giving Bob 2 quantum_rings
+- Prints updated quantities if the transaction succeeds
+- Runs inventory analytics to find top players
+- Finds the last iterated item as the "rarest item" (from last loop)
+"""
+
 game_data = {
     "players": {
         "alice": {
@@ -26,7 +56,7 @@ game_data = {
             "item_count": 2,
             "total_value": 350,
         },
-        "diana": {
+        "diana": { 
             "items": {
                 "pixel_sword": 3,
                 "code_bow": 3,
@@ -69,6 +99,9 @@ game_data = {
 
 
 def alice_inventory(player, catalog, inventory_value, item_count):
+    """
+    Prints a detailed inventory report for a given player (Alice).
+    """
     for value in player.keys():
         for val in catalog.keys():
             if value == val:
@@ -90,6 +123,9 @@ def alice_inventory(player, catalog, inventory_value, item_count):
 
 
 def inventory_analytics():
+    """
+    Analyzes all players' inventories to find top performers.'
+    """
     print("=== Inventory Analytics ===")
 
     max_item = 0
