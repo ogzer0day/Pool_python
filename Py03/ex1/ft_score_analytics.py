@@ -8,12 +8,11 @@ if __name__ == "__main__":
     total_players: int = len(sys.argv) - 1
     total_scor: int = 0
 
-    for val in sys.argv[1:]:
-        total_scor += int(value)
-
     try:
+        for value in sys.argv[1:]:
+            total_scor += int(value)
         res = total_scor / total_players
-    except ZeroDivisionError:
+    except Exception:
         print("No scores provided. Usage: python3 ft_score_analytics.py "
               "<score1> <score2> ...")
     else:
@@ -25,7 +24,6 @@ if __name__ == "__main__":
             if i != total_players - 1:
                 print(', ', end="")
             my_list.append(int(value))
-            total_scor += int(value)
             i += 1
 
         print("]")

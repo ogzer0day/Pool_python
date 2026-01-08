@@ -1,24 +1,3 @@
-"""
-Game Analytics Dashboard
-
-This script analyzes game data stored in the GameData dictionary. It demonstrates:
-- List comprehensions to filter and transform data
-- Dictionary comprehensions to summarize player scores and achievements
-- Set comprehensions to find unique players, achievements, and game modes
-- Generator expressions to compute total players, unique achievements, average score, and identify top performers
-
-Data includes:
-- Players with level, total score, sessions played, favorite mode, and achievements
-- Individual sessions with player name, score, duration, mode, and completion status
-- Metadata including game modes and achievement types
-
-The script prints an analytics dashboard summarizing:
-- High scorers and their doubled scores
-- Score categories and achievement counts
-- Unique players, achievements, and active game modes
-- Total players, average score, and top performer
-"""
-
 GameData = {
     "players": {
         "alice": {
@@ -170,16 +149,6 @@ def set_comprehension():
 
 
 if __name__ == "__main__":
-    """
-    Main execution block.
-
-    Runs all sections:
-    - List comprehension examples
-    - Dictionary comprehension examples
-    - Set comprehension examples
-    - Generator demonstration (total players, unique achievements, average 
-        score, top performer)
-    """
     print("=== Game Analytics Dashboard ===\n")
 
     print("=== List Comprehension Examples ===")

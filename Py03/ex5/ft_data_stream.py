@@ -1,30 +1,3 @@
-"""
-Game Data Stream Processor
-
-This script processes a stream of in-game events and demonstrates generator usage.
-
-Data includes:
-- events: a list of game events, each with an ID, player, event type, timestamp, and data dictionary
-- Data fields include level, score_delta, and zone
-
-Functionalities:
-1. Event streaming analytics:
-   - Counts high-level players (level > 10)
-   - Counts "Treasure" events
-   - Counts "level_up" events
-
-2. Fibonacci sequence generator:
-   - Generates a sequence of Fibonacci numbers up to a specified index
-
-3. Prime numbers generator:
-   - Generates an infinite sequence of prime numbers
-
-The script prints:
-- The first 3 events
-- Stream analytics summary
-- Demonstrations of generators (Fibonacci, primes)
-"""
-
 events = [
     {
         "id": 1,
@@ -386,9 +359,6 @@ def stream_analytics():
     - High-level players: counts events where player level > 10
     - Treasure events: counts events with event_type "Treasure"
     - Level-up events: counts events with event_type "level_up"
-
-    Iterates over all events in the 'events' list.
-    Prints summary metrics for high-level players, Treasure events, and Level-up events.
     """
 
     print("Total events processed: 1000")
@@ -451,17 +421,6 @@ def prime_numbers():
 
 
 if __name__ == "__main__":
-    """
-    Main execution block.
-
-    - Prints the first 3 events in the event stream
-    - Performs stream analytics
-    - Demonstrates generators:
-        * First 10 Fibonacci numbers
-        * First 5 prime numbers
-    - Prints memory usage and processing time
-    """
-
     print("=== Game Data Stream Processor ===\n")
 
     print("Processing 1000 game events...")
