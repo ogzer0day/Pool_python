@@ -3,75 +3,108 @@ from typing import Any, List
 
 
 class DataProcessor(ABC):
+    """Abstract base class defining a unified interface for all data
+    processors."""
 
     @abstractmethod
     def process(self, data: Any) -> Any:
+        """Process the input data and return a result. Must be implemented by
+          subclasses."""
         pass
 
     @abstractmethod
     def validate(self, data: Any) -> bool:
+        """Validate the input data. Must return True if valid, False
+        otherwise."""
         pass
 
     @abstractmethod
     def format_output(self, result: Any) -> str:
+        """Format the processed result into a human-readable string."""
         pass
 
 
 class NumericProcessor(DataProcessor):
+    """Processor for numeric data:
+    validates lists of integers, converts to strings,
+    calculates sum and average, and formats output."""
 
     def process(self, data: List[int]) -> List[str]:
+        """Convert a list of integers to a list of strings.
+          Returns 'Error' if processing fails.
+        """
         try:
             return [str(value) for value in data]
         except Exception:
-            return ("Error")
+            return "Error"
 
     def validate(self, data: Any) -> bool:
-        return (isinstance(data, list) and
-                all(isinstance(i, int) for i in data))
+        """Check if the input is a list of integers.
+        """
+        return isinstance(data, list) and all(isinstance(i, int) for i in data)
 
     def format_output(self, result: List[str]) -> str:
+        """Return a formatted string showing count, sum,
+        and average of the numeric list.
+        """
         len_lst = len(result)
         sum_lst = sum([int(i) for i in result])
         avg = sum_lst / len_lst
-        res = f"Processed {len_lst} numeric values, sum={sum_lst}, avg={avg}"
-        return (res)
+        return f"Processed {len_lst} numeric values, sum={sum_lst}, avg={avg}"
 
 
 class TextProcessor(DataProcessor):
+    """Processor for text data: strips whitespace, validates string input,
+    counts characters and words, and formats output."""
 
     def process(self, data: Any) -> str:
+        """Strip leading/trailing whitespace from the input text.
+        Returns 'Error' if invalid."""
         try:
             return data.strip()
         except Exception:
-            return ("Error")
+            return "Error"
 
     def validate(self, data: str) -> bool:
+        """Check if the input is a string."""
         return isinstance(data, str)
 
     def format_output(self, result: str) -> str:
+        """Return a formatted string showing character and word counts."""
         len_str = len(result)
-        len_words = result.split(" ")
-        words = len(len_words)
-        res_word = f"Processed text: {len_str} characters, {words} words"
-        return res_word
+        words = len(result.split(" "))
+        return f"Processed text: {len_str} characters, {words} words"
 
 
 class LogProcessor(DataProcessor):
+    """Processor for log messages: generates status or error messages,
+    validates log input, and formats output based on severity."""
 
     def process(self, data: str) -> str:
+        """
+        Return a log message. If input is 'Error',
+        returns a simulated error log; otherwise,
+        returns a normal system message.
+        """
         if data == 'Error':
-            return ("\"ERROR: Connection timeout\"")
+            return "\"ERROR: Connection timeout\""
         else:
-            return ("\"System ready\"")
+            return "\"System ready\""
 
     def validate(self, data: Any) -> bool:
-        return (isinstance(data, str) and len(data) > 0)
+        """
+        Check if the input is a non-empty string.
+        """
+        return isinstance(data, str) and len(data) > 0
 
     def format_output(self, result: str) -> str:
+        """
+        Return a formatted log message based on severity level.
+        """
         if result == "\"ERROR: Connection timeout\"":
-            return ("[ALERT] ERROR level detected: Connection timeout")
+            return "[ALERT] ERROR level detected: Connection timeout"
         else:
-            return ("[INFO] INFO level detected: System ready")
+            return "[INFO] INFO level detected: System ready"
 
 
 if __name__ == "__main__":
