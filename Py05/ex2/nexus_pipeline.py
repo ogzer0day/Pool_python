@@ -1,14 +1,50 @@
+"""
+Enterprise Processing Pipeline System
+
+This module implements a flexible, stage-based data processing pipeline
+using protocols, abstract base classes, and polymorphism. Pipelines can
+process multiple data formats (JSON, CSV, streams) through a unified
+interface managed by a central NexusManager.
+"""
+
 from abc import ABC
 from typing import Any, List, Protocol, Iterable
 
 
 class ProcessingStage(Protocol):
+    """
+    Protocol defining a processing stage in the pipeline.
+
+    Any stage must implement a `process` method that takes input data
+    and returns transformed output data.
+    """
+
     def process(self, data: Any) -> Any:
+        """
+        Process input data and return the result.
+
+        :param data: Input data of any type
+        :return: Processed data
+        """
         pass
 
 
 class InputStage:
+    """
+    Pipeline stage responsible for input validation and normalization.
+    """
+
     def process(self, data: Any) -> Any:
+        """
+        Normalize incoming data into a standard representation.
+
+        - Dictionaries are copied
+        - Lists are converted to comma-separated strings
+        - Strings are returned unchanged
+
+        :param data: Raw input data
+        :return: Normalized data
+        """
         if isinstance(data, dict):
             return dict(data)
         elif isinstance(data, list):
@@ -19,57 +55,153 @@ class InputStage:
 
 
 class TransformStage:
+    """
+    Pipeline stage responsible for data transformation and enrichment.
+    """
+
     def process(self, data: Any) -> Any:
+        """
+        Transform or enrich data.
+
+        Currently acts as a pass-through placeholder for future logic.
+
+        :param data: Input data
+        :return: Transformed data
+        """
         return data
 
 
 class OutputStage:
+    """
+    Pipeline stage responsible for final output formatting or delivery.
+    """
+
     def process(self, data: Any) -> Any:
+        """
+        Prepare processed data for output or downstream systems.
+
+        Currently acts as a pass-through placeholder.
+
+        :param data: Processed data
+        :return: Output-ready data
+        """
         return data
 
 
 class ProcessingPipeline(ABC):
+    """
+    Abstract base class representing a configurable data processing pipeline.
+
+    Pipelines consist of multiple processing stages executed sequentially.
+    """
+
     def __init__(self) -> None:
+        """
+        Initialize an empty processing pipeline.
+        """
         self.stages: List[ProcessingStage] = []
 
     def add_stage(self, stage: ProcessingStage) -> None:
+        """
+        Add a processing stage to the pipeline.
+
+        :param stage: An object implementing the ProcessingStage protocol
+        """
         self.stages.append(stage)
 
     def process(self, data: Any) -> Any:
+        """
+        Process data through all registered stages sequentially.
+
+        :param data: Input data
+        :return: Fully processed data
+        """
         for stage in self.stages:
             data = stage.process(data)
         return data
 
 
 class JSONAdapter(ProcessingPipeline):
+    """
+    Concrete pipeline adapter for processing JSON-formatted data.
+    """
+
     def __init__(self, pipeline_id: str) -> None:
+        """
+        Initialize a JSON processing pipeline.
+
+        :param pipeline_id: Unique pipeline identifier
+        """
         super().__init__()
         self.pipeline_id = pipeline_id
 
 
 class CSVAdapter(ProcessingPipeline):
+    """
+    Concrete pipeline adapter for processing CSV-formatted data.
+    """
+
     def __init__(self, pipeline_id: str) -> None:
+        """
+        Initialize a CSV processing pipeline.
+
+        :param pipeline_id: Unique pipeline identifier
+        """
         super().__init__()
         self.pipeline_id = pipeline_id
 
 
 class StreamAdapter(ProcessingPipeline):
+    """
+    Concrete pipeline adapter for processing streaming data.
+    """
+
     def __init__(self, pipeline_id: str) -> None:
+        """
+        Initialize a stream processing pipeline.
+
+        :param pipeline_id: Unique pipeline identifier
+        """
         super().__init__()
         self.pipeline_id = pipeline_id
 
 
 class NexusManager:
+    """
+    Central coordinator responsible for managing and executing
+    multiple processing pipelines.
+    """
+
     def __init__(self) -> None:
+        """
+        Initialize the Nexus manager with no registered pipelines.
+        """
         self.pipelines: List[ProcessingPipeline] = []
 
     def add_pipeline(self, pipeline: ProcessingPipeline) -> None:
+        """
+        Register a processing pipeline with the Nexus manager.
+
+        :param pipeline: A concrete ProcessingPipeline instance
+        """
         self.pipelines.append(pipeline)
 
     def process_data(self, data: Iterable[Any]) -> list[Any]:
-        pipelines_list = [pipeline.process(val) for val in data
-                          for pipeline in self.pipelines]
+        """
+        Process iterable data through all registered pipelines.
+
+        Each data item is processed independently by each pipeline.
+
+        :param data: Iterable collection of input data
+        :return: List of processed outputs
+        """
+        pipelines_list = [
+            pipeline.process(val)
+            for val in data
+            for pipeline in self.pipelines
+        ]
         return pipelines_list
+
 
 
 if __name__ == "__main__":
