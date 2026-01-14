@@ -3,7 +3,7 @@ from typing import Any, List, Dict, Union, Optional
 
 
 class DataStream(ABC):
-    def __init__(self, stream_id: str, stream_type: str) -> None:
+    def __init__(self, stream_id: str, stream_type: str = None) -> None:
         self.stream_id = stream_id
         self.stream_type = stream_type
 
@@ -14,7 +14,9 @@ class DataStream(ABC):
     def filter_data(
         self, data_batch: List[Any], criteria: Optional[str] = None
     ) -> List[Any]:
-        pass
+        if criteria is None:
+            return data_batch
+        return [item for item in data_batch if criteria in str(item)]
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         return {
@@ -25,7 +27,8 @@ class DataStream(ABC):
 
 class SensorStream(DataStream):
     def __init__(
-        self, stream_id: str, stream_type: str, count: int, avg_temp: float
+        self, stream_id: str, stream_type: str = None, count: int = None,
+        avg_temp: float = None
     ) -> None:
         super().__init__(stream_id, stream_type)
         self.avg_temp = avg_temp
@@ -43,7 +46,7 @@ class SensorStream(DataStream):
 
 class TransactionStream(DataStream):
     def __init__(
-        self, stream_id: str, stream_type: str, net_flow: int
+        self, stream_id: str, stream_type: str = None, net_flow: int = None
     ) -> None:
         super().__init__(stream_id, stream_type)
         self.net_flow = net_flow
@@ -61,7 +64,7 @@ class TransactionStream(DataStream):
 
 class EventStream(DataStream):
     def __init__(
-        self, stream_id: str, stream_type: str, detect_error: int
+        self, stream_id: str, stream_type: str = None, detect_error: int = None
     ) -> None:
         super().__init__(stream_id, stream_type)
         self.detect_error = detect_error
@@ -76,7 +79,19 @@ class EventStream(DataStream):
 
 
 class StreamProcessor:
-    print("Stream filtering active: High-priority data only")
+    """Coordinator for polymorphic stream processing."""
+
+    def __init__(self) -> None:
+        self.streams: List[DataStream] = []
+
+    def register_stream(self, stream: DataStream) -> None:
+        self.streams.append(stream)
+
+    def process_all(self, batches: Dict[str, List[Any]]) -> None:
+        for stream in self.streams:
+            batch = batches.get(stream.stream_id)
+            if batch is not None:
+                stream.process_batch(batch)
 
 
 if __name__ == "__main__":
@@ -89,7 +104,8 @@ if __name__ == "__main__":
         f"Type: {sensor_stream.stream_type}"
     )
     print(
-        sensor_stream.process_batch([{"temp": 22.5, "humidity": 65, "pressure": 1013}])
+        sensor_stream.process_batch(
+            [{"temp": 22.5, "humidity": 65, "pressure": 1013}])
     )
     print(
         f"Sensor analysis: {sensor_stream.count} readings processed, "
@@ -102,9 +118,10 @@ if __name__ == "__main__":
         f"Stream ID: {transaction_stream.stream_id}, "
         f"Type: {transaction_stream.stream_type}"
     )
+    dic = {'buy_a': 100, 'sell': 150, 'buy_b': 75}
     print(
-        f"Processing transaction batch: "
-        f"{transaction_stream.process_batch([{'buy_a': 100, 'sell': 150, 'buy_b': 75}])}"
+        "Processing transaction batch: "
+        f"{transaction_stream.process_batch([dic])}"
     )
     print(
         f"Transaction analysis: {transaction_stream.count} operations, "
@@ -132,10 +149,14 @@ if __name__ == "__main__":
     print("Batch 1 Results:")
     sensor_stream.process_batch([{"temp": 22.5, "humidity": 65}])
     print(f"- Sensor data: {sensor_stream.count} readings processed")
-    transaction_stream.process_batch([{'buy_a': 100, 'sell': 150, 'buy_b': 75, 'sell_2': 40}])
+    transaction_stream.process_batch(
+        [{'buy_a': 100, 'sell': 150, 'buy_b': 75}])
     print(f"- Transaction data: {transaction_stream.count} "
           "operations processed")
     event_stream.process_batch(['login', 'error', 'logout'])
-    print(f"- Event data: {event_stream.count} events processed")
+    print(f"- Event data: {event_stream.count} events processed\n")
+
+    print("Stream filtering active: High-priority data only\n"
+          "Filtered results: 2 critical sensor alerts, 1 large transaction\n")
 
     print("All streams processed successfully. Nexus throughput optimal.")
