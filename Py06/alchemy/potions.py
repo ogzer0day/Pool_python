@@ -13,9 +13,9 @@ def strength_potion() -> str:
 
 
 def invisibility_potion() -> str:
-    print(f"Invisibility potion brewed with {create_air()} and"
-          f"{create_water()}")
+    return (f"Invisibility potion brewed with {create_air()} and"
+            f"{create_water()}")
 
 
 def wisdom_potion() -> str:
-    print(f"Wisdom potion brewed with all elements: {list[create_fire(), create_water(), create_air(), create_earth()]}")
+    return (f"Wisdom potion brewed with all elements: {list[create_fire(), create_water(), create_air(), create_earth()]}")
