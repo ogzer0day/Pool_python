@@ -15,6 +15,14 @@ print(f"alchemy.elements.create_air(): "
 print("Testing package-level access "
       "(controlled by __init__.py):")
 try:
+    print(f"alchemy.create_fire(): {alchemy.create_fire()}")
+except AttributeError:
+    print("alchemy.create_fire(): AttributeError - not exposed")
+try:
+    print(f"alchemy.create_water(): {alchemy.create_water()}")
+except AttributeError:
+    print("alchemy.create_wate: AttributeError - not exposed")
+try:
     print(f"alchemy.create_earth(): {alchemy.reate_earth()}")
 except AttributeError:
     print("alchemy.create_earth(): AttributeError - not exposed")
